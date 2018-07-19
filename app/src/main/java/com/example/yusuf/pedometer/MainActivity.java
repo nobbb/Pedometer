@@ -3,6 +3,8 @@ package com.example.yusuf.pedometer;
 /** Activity class - for Managing and Update UI elements (views). */
 
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +19,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button startServiceBtn;
     Button stopServiceBtn;
+
+    ToggleButton ServiceBtn;
 
     String countedStep;
     String DetectedStep;
@@ -116,6 +122,32 @@ public class MainActivity extends AppCompatActivity {
 
         // ________________ Service Management (Start & Stop Service). ________________ //
         // ___ start Service & register broadcast receiver ___ \\
+        ServiceBtn = (ToggleButton)findViewById(R.id.ServiceBtn);
+
+        ServiceBtn.setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener(){
+                    public void onCheckedChanged(CompoundButton comButton, boolean isChecked){
+                        // オンなら
+                        if(isChecked){
+                            startService(new Intent(getBaseContext(), StepCountingService.class));
+                            // register our BroadcastReceiver by passing in an IntentFilter. * identifying the message that is broadcasted by using static string "BROADCAST_ACTION".
+                            registerReceiver(broadcastReceiver, new IntentFilter(StepCountingService.BROADCAST_ACTION));
+                            isServiceStopped = false;
+                        }
+                        // オフなら
+                        else{
+                            // call unregisterReceiver - to stop listening for broadcasts.
+                            unregisterReceiver(broadcastReceiver);
+                            // stop Service.
+                            stopService(new Intent(getBaseContext(), StepCountingService.class));
+                            isServiceStopped = true;
+                        }
+                    }
+                }
+        );
+
+
+
         startServiceBtn = (Button)findViewById(R.id.startServiceBtn);
         startServiceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
