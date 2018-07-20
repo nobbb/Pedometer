@@ -92,9 +92,11 @@ public class StepCountingService extends Service implements SensorEventListener 
         if(intent!=null){
             if("show".equals(intent.getAction())){
                 //通知を表示
+                showNotification();
 
             }else if("hide".equals(intent.getAction())){
                 //通知を非表示
+                hideNotification();
             }
         }
         return START_STICKY;
@@ -189,6 +191,16 @@ public class StepCountingService extends Service implements SensorEventListener 
         //NotificationManagerを取得
         NotificationManagerCompat manager = NotificationManagerCompat.from(this);
         manager.notify(0,builder.build());
+    }
+
+    /**
+     * Notificationを消去
+     */
+
+    private void hideNotification(){
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        // Notificationを作成して通知
+        manager.cancel(0);
     }
     /*private void showNotification() {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);

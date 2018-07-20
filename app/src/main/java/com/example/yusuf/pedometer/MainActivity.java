@@ -37,6 +37,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.
+
 public class MainActivity extends AppCompatActivity {
 
     TextView stepCountTxV;
@@ -86,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, StepCountingService.class);
 
         init(); // Call view initialisation method.
+
+
         createBarChart();
     }
 
