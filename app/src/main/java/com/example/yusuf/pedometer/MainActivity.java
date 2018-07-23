@@ -38,7 +38,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.
+import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         init(); // Call view initialisation method.
 
-
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
+        Realm.setDefaultConfiguration(realmConfig);
         createBarChart();
     }
 
@@ -99,34 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
         isServiceStopped = true; // variable for managing service state - required to invoke "stopService" only once to avoid Exception.
 
-        // Layout Background Image Management.
-        /*try {
-            // Parent Relative Layout Background.
-            // Get input stream.
-            InputStream inputStream = getAssets().open("h.jpg");
-            // Load image as drawable.
-            Drawable parentDrawable = Drawable.createFromStream(inputStream, null);
-            // Set opacity (transparency) of image.
-            parentDrawable.setAlpha(32);
-            // Retrieve parent relativelayout.
-            RelativeLayout parentLayout = (RelativeLayout)findViewById(R.id.parentLayout);
-            // Set drawable image to imageview.
-            parentLayout.setBackground(parentDrawable);
-
-            // Child Linear Layout Background.
-            InputStream inputStream2 = getAssets().open("c.jpg");
-            Drawable childDrawable = Drawable.createFromStream(inputStream2, null);
-            childDrawable.setAlpha(128);
-            LinearLayout childLayout = (LinearLayout)findViewById(R.id.childLayout);
-            childLayout.setBackground(childDrawable);
-
-        }
-        catch (IOException ioe) {
-            ioe.printStackTrace();
-        }*/
 
         // ________________ Service Management (Start & Stop Service). ________________ //
         // ___ start Service & register broadcast receiver ___ \\
+
+        //トグルボタン内の処理
         ServiceBtn = (ToggleButton)findViewById(R.id.ServiceBtn);
 
         ServiceBtn.setOnCheckedChangeListener(
@@ -152,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-
-        startServiceBtn = (Button)findViewById(R.id.startServiceBtn);
+        //スタートボタン
+        /*startServiceBtn = (Button)findViewById(R.id.startServiceBtn);
         startServiceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //ストップボタン
         // ___ unregister receiver & stop service ___ \\
         stopServiceBtn = (Button)findViewById(R.id.stopServiceBtn);
         stopServiceBtn.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     isServiceStopped = true;
                 }
             }
-        });
+        });*/
         // ___________________________________________________________________________ \\
 
         // Textviews
@@ -227,11 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
         /*childLayout = (LinearLayout) findViewById(R.id.childLayout);
         Rect rect = new Rect();
-        childLayout.getLocalVisibleRect(rect);
-        Log.d("Child layout Height", String.valueOf(rect.height()));
-        Log.d("Child layout Width", String.valueOf(rect.width()));
-        Log.d("ChildLayout B-most px", String.valueOf(rect.bottom));
-        Log.d("ChildLayout R-most px", String.valueOf(rect.right));*/
+        childLayout.getLocalVisibleRect(rect);*/
     }
 
 
@@ -301,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
         stepCountTxV.setText("歩数 " + String.valueOf(countedStep));
         //stepDetectTxV.setText("Steps Detected = " + String.valueOf(DetectedStep) + '"');
-        stepDetectTxV.setText("");
+        stepDetectTxV.setText("ストップしました");
 
         //txvAnimation();
     }
