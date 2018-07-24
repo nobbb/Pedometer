@@ -1,7 +1,5 @@
 package com.example.yusuf.pedometer;
 
-/** Activity class - for Managing and Update UI elements (views). */
-
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.app.Service;
@@ -44,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     TextView stepCountTxV;
     TextView stepDetectTxV;
-
-    Button startServiceBtn;
-    Button stopServiceBtn;
 
     ToggleButton ServiceBtn;
 
@@ -105,23 +100,19 @@ public class MainActivity extends AppCompatActivity {
         // ___ start Service & register broadcast receiver ___ \\
 
         //トグルボタン内の処理
-        ServiceBtn = (ToggleButton)findViewById(R.id.ServiceBtn);
-
+        ServiceBtn = findViewById(R.id.ServiceBtn);
         ServiceBtn.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener(){
                     public void onCheckedChanged(CompoundButton comButton, boolean isChecked){
                         // オンなら
                         if(isChecked){
                             startService(new Intent(getBaseContext(), StepCountingService.class));
-                            // register our BroadcastReceiver by passing in an IntentFilter. * identifying the message that is broadcasted by using static string "BROADCAST_ACTION".
                             registerReceiver(broadcastReceiver, new IntentFilter(StepCountingService.BROADCAST_ACTION));
                             isServiceStopped = false;
                         }
                         // オフなら
                         else{
-                            // call unregisterReceiver - to stop listening for broadcasts.
                             unregisterReceiver(broadcastReceiver);
-                            // stop Service.
                             stopService(new Intent(getBaseContext(), StepCountingService.class));
                             isServiceStopped = true;
                         }
@@ -129,35 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-
-        //スタートボタン
-        /*startServiceBtn = (Button)findViewById(R.id.startServiceBtn);
-        startServiceBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // start Service.
-                startService(new Intent(getBaseContext(), StepCountingService.class));
-                // register our BroadcastReceiver by passing in an IntentFilter. * identifying the message that is broadcasted by using static string "BROADCAST_ACTION".
-                registerReceiver(broadcastReceiver, new IntentFilter(StepCountingService.BROADCAST_ACTION));
-                isServiceStopped = false;
-            }
-        });
-
-        //ストップボタン
-        // ___ unregister receiver & stop service ___ \\
-        stopServiceBtn = (Button)findViewById(R.id.stopServiceBtn);
-        stopServiceBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isServiceStopped) {
-                    // call unregisterReceiver - to stop listening for broadcasts.
-                    unregisterReceiver(broadcastReceiver);
-                    // stop Service.
-                    stopService(new Intent(getBaseContext(), StepCountingService.class));
-                    isServiceStopped = true;
-                }
-            }
-        });*/
         // ___________________________________________________________________________ \\
 
         // Textviews
@@ -216,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //aboutを押した際の挙動
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -244,26 +207,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /*private void txvAnimation() {
-        TranslateAnimation translateAnimation = new TranslateAnimation(100,-100,100,-100);
-        translateAnimation.setDuration(200);
-        translateAnimation.setInterpolator(new LinearOutSlowInInterpolator());
-        stepCountTxV.startAnimation(translateAnimation);
-        ScaleAnimation sclaeAnimation = new ScaleAnimation(0,1,0,1);
-        sclaeAnimation.setDuration(200);
-        sclaeAnimation.setInterpolator(new AnticipateOvershootInterpolator());
-        stepDetectTxV.startAnimation(sclaeAnimation);
-
-        TranslateAnimation translateAnimation3 = new TranslateAnimation(-100,0,-100,0);
-        translateAnimation3.setDuration(200);
-        translateAnimation3.setInterpolator(new CycleInterpolator(2));
-        imageView2.startAnimation(translateAnimation3);
-        ScaleAnimation sclaeAnimation3 = new ScaleAnimation(0,1,1,0);
-        sclaeAnimation3.setDuration(200);
-        sclaeAnimation3.setInterpolator(new BounceInterpolator());
-        imageView2.startAnimation(sclaeAnimation3);
-    }*/
-
 
     // --------------------------------------------------------------------------- \\
     // ___ retrieve data from intent & set data to textviews __ \\
@@ -276,9 +219,8 @@ public class MainActivity extends AppCompatActivity {
 
         stepCountTxV.setText("歩数 " + String.valueOf(countedStep));
         //stepDetectTxV.setText("Steps Detected = " + String.valueOf(DetectedStep) + '"');
-        stepDetectTxV.setText("ストップしました");
+        stepDetectTxV.setText("");
 
-        //txvAnimation();
     }
     // ___________________________________________________________________________ \\
 
@@ -287,9 +229,10 @@ public class MainActivity extends AppCompatActivity {
         Log.v("animation", "start");
         animationCustomView.init();
     }
+
     // ------------------ 棒グラフ ここから -----------------
     private void createBarChart() {
-        BarChart barChart = (BarChart) findViewById(R.id.bar_chart);
+        BarChart barChart =findViewById(R.id.bar_chart);
         barChart.setDescription("BarChart 説明");
 
         barChart.getAxisRight().setEnabled(false);
@@ -351,19 +294,6 @@ public class MainActivity extends AppCompatActivity {
 
         barDataSets.add(valuesADataSet);
 
-        // valueB
-        /*ArrayList<BarEntry> valuesB = new ArrayList<>();
-        valuesB.add(new BarEntry(200, 0));
-        valuesB.add(new BarEntry(300, 1));
-        valuesB.add(new BarEntry(400, 2));
-        valuesB.add(new BarEntry(500, 3));
-        valuesB.add(new BarEntry(600, 4));
-        valuesB.add(new BarEntry(700, 5));
-
-        BarDataSet valuesBDataSet = new BarDataSet(valuesB, "B");
-        valuesBDataSet.setColor(ColorTemplate.COLORFUL_COLORS[4]);
-
-        barDataSets.add(valuesBDataSet);*/
 
         BarData barData = new BarData(xValues, barDataSets);
         return barData;

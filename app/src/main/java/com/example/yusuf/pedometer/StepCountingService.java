@@ -135,7 +135,7 @@ public class StepCountingService extends Service implements SensorEventListener 
             int countSteps = (int) event.values[0];
 
             // -The long way of starting a new step counting sequence.-
-            /**
+            /*
              int tempStepCount = countSteps;
              int initialStepCount = countSteps - tempStepCount; // Nullify step count - so that the step cpuinting can restart.
              currentStepCount += initialStepCount; // This variable will be initialised with (0), and will be incremented by itself for every Sensor step counted.
@@ -202,6 +202,8 @@ public class StepCountingService extends Service implements SensorEventListener 
         // Notificationを作成して通知
         manager.cancel(0);
     }
+
+    //以前の通知表示処理
     /*private void showNotification() {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setContentTitle("Pedometer");
