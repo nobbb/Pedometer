@@ -15,6 +15,13 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import java.util.Date;
+
+import io.realm.Realm;
+
+import io.realm.RealmResults;
+import io.realm.Sort;
+
 // _________ Extend Service class & implement Service lifecycle callback methods. _________ //
 public class StepCountingService extends Service implements SensorEventListener {
 
@@ -30,6 +37,7 @@ public class StepCountingService extends Service implements SensorEventListener 
 
     boolean serviceStopped; // Boolean variable to control the repeating timer.
 
+    private Realm mRealm;
     //NotificationManager notificationManager;          //
 
     // --------------------------------------------------------------------------- \\
@@ -114,10 +122,26 @@ public class StepCountingService extends Service implements SensorEventListener 
     public void onDestroy() {
         super.onDestroy();
         Log.v("Service", "Stop");
-
         serviceStopped = true;
 
+        insert();
         dismissNotification();
+    }
+
+    /**
+     * Catを追加します
+     */
+    public void insert() {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Structure structure = new Structure();
+                Date d  = new Date();
+                structure.setDate(d);
+                structure.setStep(newStepCounter);
+                realm.insert(structure);
+            }
+        });
     }
 
     /** Called when the overall system is running low on memory, and actively running processes should trim their memory usage. */
